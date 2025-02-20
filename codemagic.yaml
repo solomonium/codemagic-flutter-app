@@ -6,7 +6,7 @@ workflows:
     environment:
       vars:
         FIREBASE_APP_ID: "1:947149653644:ios:f65e080c90dfff03f99da9"
-        GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS
+        GOOGLE_APPLICATION_CREDENTIALS_BASE64: $GOOGLE_APPLICATION_CREDENTIALS_BASE64
       flutter: stable
       xcode: latest
       cocoapods: default
@@ -27,7 +27,6 @@ workflows:
 
       - name: Distribute to Firebase App Distribution
         script: |
-          # Check if Firebase CLI is already installed
           if ! command -v firebase &> /dev/null; then
             echo "Installing Firebase CLI..."
             npm install -g firebase-tools
@@ -35,26 +34,23 @@ workflows:
             echo "Firebase CLI is already installed."
           fi
 
-          # Authenticate with Firebase using the service account JSON
-          echo "Authenticating with Firebase..."
-          echo "$GOOGLE_APPLICATION_CREDENTIALS" > /tmp/service-account.json
+          echo "Decoding service account JSON..."
+          echo "$GOOGLE_APPLICATION_CREDENTIALS_BASE64" | base64 --decode > /tmp/service-account.json
           export GOOGLE_APPLICATION_CREDENTIALS="/tmp/service-account.json"
 
-          # Verify authentication
           echo "Verifying Firebase authentication..."
-          firebase login --non-interactive --token "$(cat /tmp/service-account.json | jq -r '.private_key')"
+          firebase login:ci --token "$(cat /tmp/service-account.json | jq -r '.private_key')"
 
-          # Distribute the app bundle
           echo "Distributing app bundle to Firebase App Distribution..."
           firebase appdistribution:distribute build/ios/ipa/Runner.app \
             --app $FIREBASE_APP_ID \
             --groups "testers" \
             --release-notes "Build ${CM_BUILD_NUMBER} - Unsigned iOS App"
-
-    artifacts:
-      - build/ios/ipa/Runner.app
+          artifacts:
+            - build/ios/ipa/Runner.app
 
     publishing:
+      # Email notifications
       email:
         recipients:
           - laleye.solomon@yahoo.com
