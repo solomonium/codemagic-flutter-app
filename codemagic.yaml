@@ -25,10 +25,3 @@ workflows:
     publishing:
       firebase:
         firebase_token: $FIREBASE_TOKEN
-        recipients:
-          - laleye.solomon@yahoo.com
-          - laleyesolomon2@gmail.com
-          - laleyesolomon3@gmail.com
-          - nihal@nevercode.io
-        notify:
-          success: true
