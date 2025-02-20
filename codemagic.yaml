@@ -4,30 +4,37 @@ workflows:
     environment:
       flutter: stable
       xcode: latest
+      vars:
+        GOOGLE_APPLICATION_CREDENTIALS: YOUR_SERVICE_ACCOUNT_JSON
+        FIREBASE_APP_ID: YOUR_FIREBASE_APP_ID
     scripts:
       - name: Install Flutter dependencies
         script: flutter pub get
+
       - name: Install CocoaPods dependencies
         script: |
           cd ios
           pod install
           cd ..
+
       - name: Build IPA
-        # script: flutter build ipa --release --export-options-plist=ios/ExportOptions.plist
         script: |
           flutter build ipa --release --no-codesign
           mkdir -p build/ios/ipa
-          mv build/ios/iphoneos/*.ipa build/ios/ipa/
+          mv build/ios/iphoneos/*.ipa build/ios/ipa/ || echo "No IPA files found"
 
     artifacts:
       - build/ios/ipa/*.ipa
 
     publishing:
-      # firebase:
-      #   firebase_token: $FIREBASE_TOKEN
-      #   app_id: $FIREBASE_APP_ID
-      #   groups: testers
-      #   release_notes: "Build ${CM_BUILD_NUMBER} - iOS App"
+      # Distribute to Firebase App Distribution
+      firebase:
+        credentials: $GOOGLE_APPLICATION_CREDENTIALS
+        app_id: $FIREBASE_APP_ID
+        groups: testers
+        release_notes: "Build ${CM_BUILD_NUMBER} - Unsigned iOS App"
+
+      # Email notifications
       email:
         recipients:
           - laleye.solomon@yahoo.com
