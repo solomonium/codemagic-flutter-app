@@ -5,7 +5,7 @@ workflows:
     max_build_duration: 120
     environment:
       vars:
-        # FIREBASE_APP_ID: "1:947149653644:ios:f65e080c90dfff03f99da9"
+        FIREBASE_APP_ID: "1:947149653644:ios:f65e080c90dfff03f99da9"
         FIREBASE_TOKEN: $FIREBASE_TOKEN
       flutter: stable
       xcode: latest
