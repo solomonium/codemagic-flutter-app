@@ -1,0 +1,34 @@
+{
+    "sourceFile": "codemagic.yaml",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 4,
+            "patches": [
+                {
+                    "date": 1740023239870,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1740024458648,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n \n     publishing:\n       firebase:\n         firebase_token: $FIREBASE_TOKEN\n-        app_id: $FIREBASE_APP_ID\n+        app_id: 1:947149653644:ios:f65e080c90dfff03f99da9\n         groups: testers\n         release_notes: \"Build ${CM_BUILD_NUMBER} - Default Flutter App\"\n       email:\n         recipients:\n"
+                },
+                {
+                    "date": 1740024766348,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,9 @@\n       - build/ios/ipa/*.ipa\n \n     publishing:\n       firebase:\n-        firebase_token: $FIREBASE_TOKEN\n+        firebase_token: 1//03wTSdSULv0iHCgYIARAAGAMSNwF-L9Ir-dvb54xNPsrtZ8-0Vgf23ClvJHO_G4hTFEe_jJP0Ekj6cNTR0WQ22mfKSoHZyy741cU\n         app_id: 1:947149653644:ios:f65e080c90dfff03f99da9\n         groups: testers\n         release_notes: \"Build ${CM_BUILD_NUMBER} - Default Flutter App\"\n       email:\n"
+                },
+                {
+                    "date": 1740026544188,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,9 @@\n     publishing:\n       firebase:\n         firebase_token: 1//03wTSdSULv0iHCgYIARAAGAMSNwF-L9Ir-dvb54xNPsrtZ8-0Vgf23ClvJHO_G4hTFEe_jJP0Ekj6cNTR0WQ22mfKSoHZyy741cU\n         app_id: 1:947149653644:ios:f65e080c90dfff03f99da9\n-        groups: testers\n+        groups: testflight\n         release_notes: \"Build ${CM_BUILD_NUMBER} - Default Flutter App\"\n       email:\n         recipients:\n           - laleye.solomon@yahoo.com\n"
+                },
+                {
+                    "date": 1740026990563,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,4 +26,7 @@\n         release_notes: \"Build ${CM_BUILD_NUMBER} - Default Flutter App\"\n       email:\n         recipients:\n           - laleye.solomon@yahoo.com\n+          - nihal@nevercode.io\n+        notify:\n+          success: true\n"
+                }
+            ],
+            "date": 1740023239870,
+            "name": "Commit-0",
+            "content": "workflows:\n  ios-workflow:\n    name: iOS Workflow\n    environment:\n      flutter: stable\n      xcode: latest\n    scripts:\n      - name: Install Flutter dependencies\n        script: flutter pub get\n      - name: Install CocoaPods dependencies\n        script: |\n          cd ios\n          pod install\n          cd ..\n      - name: Build IPA\n        script: flutter build ipa --release --export-options-plist=ios/ExportOptions.plist\n\n    artifacts:\n      - build/ios/ipa/*.ipa\n\n    publishing:\n      firebase:\n        firebase_token: $FIREBASE_TOKEN\n        app_id: $FIREBASE_APP_ID\n        groups: testers\n        release_notes: \"Build ${CM_BUILD_NUMBER} - Default Flutter App\"\n      email:\n        recipients:\n          - laleye.solomon@yahoo.com"
+        }
+    ]
+}
