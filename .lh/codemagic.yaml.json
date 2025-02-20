@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 5,
+            "activePatchIndex": 6,
             "patches": [
                 {
                     "date": 1740023239870,
@@ -28,6 +28,10 @@
                 {
                     "date": 1740029846163,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,9 @@\n     publishing:\n       firebase:\n         firebase_token: 1//03wTSdSULv0iHCgYIARAAGAMSNwF-L9Ir-dvb54xNPsrtZ8-0Vgf23ClvJHO_G4hTFEe_jJP0Ekj6cNTR0WQ22mfKSoHZyy741cU\n         app_id: 1:947149653644:ios:f65e080c90dfff03f99da9\n-        groups: testflight\n+        groups: testers\n         release_notes: \"Build ${CM_BUILD_NUMBER} - Default Flutter App\"\n       email:\n         recipients:\n           - laleye.solomon@yahoo.com\n"
+                },
+                {
+                    "date": 1740029952339,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,7 +26,8 @@\n         release_notes: \"Build ${CM_BUILD_NUMBER} - Default Flutter App\"\n       email:\n         recipients:\n           - laleye.solomon@yahoo.com\n+          - laleyesolomon2@gmail.com\n           - nihal@nevercode.io\n         notify:\n           success: true\n"
                 }
             ],
             "date": 1740023239870,
