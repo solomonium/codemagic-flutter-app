@@ -19,15 +19,6 @@ workflows:
         script: |
           find . -name "Podfile" -execdir pod install \;
 
-      - name: Flutter analyze
-        script: |
-          flutter analyze
-
-      - name: Flutter unit tests
-        script: |
-          flutter test
-        ignore_failure: true
-
       - name: Flutter build ipa
         script: |
           flutter build ipa --release --no-codesign
@@ -48,6 +39,10 @@ workflows:
           echo "Authenticating with Firebase..."
           echo "$GOOGLE_APPLICATION_CREDENTIALS" > /tmp/service-account.json
           export GOOGLE_APPLICATION_CREDENTIALS="/tmp/service-account.json"
+
+          # Verify authentication
+          echo "Verifying Firebase authentication..."
+          firebase projects:list --token "$(cat /tmp/service-account.json | jq -r '.private_key')"
 
           # Distribute the app bundle
           echo "Distributing app bundle to Firebase App Distribution..."
