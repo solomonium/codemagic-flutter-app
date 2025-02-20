@@ -3,6 +3,6 @@
 <plist version="1.0">
 <dict>
     <key>method</key>
-    <string>app-store</string> <!-- Use 'ad-hoc' or 'development' for testing -->
+    <string>app-store</string>
 </dict>
 </plist>

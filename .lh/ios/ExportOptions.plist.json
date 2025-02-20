@@ -3,11 +3,15 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 0,
+            "activePatchIndex": 1,
             "patches": [
                 {
                     "date": 1740025824323,
                     "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1740029083701,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,7 +2,7 @@\n <!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n <plist version=\"1.0\">\n <dict>\n     <key>method</key>\n-    <string>app-store</string> <!-- Use 'ad-hoc' or 'development' for testing -->\n+    <string>app-store</string>\n </dict>\n </plist>\n\\ No newline at end of file\n"
                 }
             ],
             "date": 1740025824323,
