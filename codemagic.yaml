@@ -23,5 +23,16 @@ workflows:
       - build/ios/ipa/*.ipa
 
     publishing:
-      firebase:
-        firebase_token: $FIREBASE_TOKEN
+      # firebase:
+      #   firebase_token: $FIREBASE_TOKEN
+      #   app_id: $FIREBASE_APP_ID
+      #   groups: testers
+      #   release_notes: "Build ${CM_BUILD_NUMBER} - iOS App"
+      email:
+        recipients:
+          - laleye.solomon@yahoo.com
+          - laleyesolomon2@gmail.com
+          - laleyesolomon3@gmail.com
+          - nihal@nevercode.io
+        notify:
+          success: true
