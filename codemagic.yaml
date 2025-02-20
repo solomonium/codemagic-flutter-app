@@ -39,7 +39,7 @@ workflows:
           export GOOGLE_APPLICATION_CREDENTIALS="/tmp/service-account.json"
 
           echo "Verifying Firebase authentication..."
-          firebase login:ci --token "$(cat /tmp/service-account.json | jq -r '.private_key')"
+          firebase login:ci --non-interactive --token "$(cat /tmp/service-account.json | jq -r '.private_key')"
 
           echo "Distributing app bundle to Firebase App Distribution..."
           firebase appdistribution:distribute build/ios/ipa/Runner.app \
