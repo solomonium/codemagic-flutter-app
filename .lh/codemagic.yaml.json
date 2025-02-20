@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 8,
+            "activePatchIndex": 9,
             "patches": [
                 {
                     "date": 1740023239870,
@@ -40,6 +40,10 @@
                 {
                     "date": 1740031931586,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,12 +19,12 @@\n       - build/ios/ipa/*.ipa\n \n     publishing:\n       firebase:\n-        firebase_token: 1//03wTSdSULv0iHCgYIARAAGAMSNwF-L9Ir-dvb54xNPsrtZ8-0Vgf23ClvJHO_G4hTFEe_jJP0Ekj6cNTR0WQ22mfKSoHZyy741cU\n-        app_id: 1:947149653644:ios:f65e080c90dfff03f99da9\n-        groups: testers\n-        release_notes: \"Build ${CM_BUILD_NUMBER} - Default Flutter App\"\n+          firebase_token: $FIREBASE_TOKEN\n+          app_id: $FIREBASE_APP_ID\n+          groups: testers\n+          release_notes: \"Build ${CM_BUILD_NUMBER} - Default Flutter App\"\n       email:\n         recipients:\n           - laleye.solomon@yahoo.com\n           - laleyesolomon2@gmail.com\n"
+                },
+                {
+                    "date": 1740034554341,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,9 @@\n       - build/ios/ipa/*.ipa\n \n     publishing:\n       firebase:\n-        firebase_token: $FIREBASE_TOKEN\n+        credentials: $GOOGLE_APPLICATION_CREDENTIALS\n         app_id: $FIREBASE_APP_ID\n         groups: testers\n         release_notes: \"Build ${CM_BUILD_NUMBER} - Default Flutter App\"\n       email:\n"
                 }
             ],
             "date": 1740023239870,

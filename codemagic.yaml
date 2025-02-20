@@ -20,7 +20,7 @@ workflows:
 
     publishing:
       firebase:
-        firebase_token: $FIREBASE_TOKEN
+        credentials: $GOOGLE_APPLICATION_CREDENTIALS
         app_id: $FIREBASE_APP_ID
         groups: testers
         release_notes: "Build ${CM_BUILD_NUMBER} - Default Flutter App"
