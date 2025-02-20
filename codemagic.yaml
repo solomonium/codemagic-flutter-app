@@ -13,7 +13,11 @@ workflows:
           pod install
           cd ..
       - name: Build IPA
-        script: flutter build ipa --release --export-options-plist=ios/ExportOptions.plist
+        # script: flutter build ipa --release --export-options-plist=ios/ExportOptions.plist
+        script: |
+          flutter build ipa --release --no-codesign
+          mkdir -p build/ios/ipa
+          mv build/ios/iphoneos/*.ipa build/ios/ipa/
 
     artifacts:
       - build/ios/ipa/*.ipa
