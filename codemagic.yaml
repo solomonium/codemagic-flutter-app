@@ -20,8 +20,8 @@ workflows:
 
     publishing:
       firebase:
-        firebase_token: 1//03wTSdSULv0iHCgYIARAAGAMSNwF-L9Ir-dvb54xNPsrtZ8-0Vgf23ClvJHO_G4hTFEe_jJP0Ekj6cNTR0WQ22mfKSoHZyy741cU
-        app_id: 1:947149653644:ios:f65e080c90dfff03f99da9
+        firebase_token: $FIREBASE_TOKEN
+        app_id: $FIREBASE_APP_ID
         groups: testers
         release_notes: "Build ${CM_BUILD_NUMBER} - Default Flutter App"
       email:
