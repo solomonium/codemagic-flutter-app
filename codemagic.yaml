@@ -28,6 +28,7 @@ workflows:
         recipients:
           - laleye.solomon@yahoo.com
           - laleyesolomon2@gmail.com
+          - laleyesolomon3@gmail.com
           - nihal@nevercode.io
         notify:
           success: true

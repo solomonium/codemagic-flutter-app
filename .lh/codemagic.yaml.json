@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 6,
+            "activePatchIndex": 7,
             "patches": [
                 {
                     "date": 1740023239870,
@@ -32,6 +32,10 @@
                 {
                     "date": 1740029952339,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,7 +26,8 @@\n         release_notes: \"Build ${CM_BUILD_NUMBER} - Default Flutter App\"\n       email:\n         recipients:\n           - laleye.solomon@yahoo.com\n+          - laleyesolomon2@gmail.com\n           - nihal@nevercode.io\n         notify:\n           success: true\n"
+                },
+                {
+                    "date": 1740030311845,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,7 +27,8 @@\n       email:\n         recipients:\n           - laleye.solomon@yahoo.com\n           - laleyesolomon2@gmail.com\n+          - laleyesolomon3@gmail.com\n           - nihal@nevercode.io\n         notify:\n           success: true\n"
                 }
             ],
             "date": 1740023239870,
