@@ -46,7 +46,6 @@ workflows:
 
           # Authenticate with Firebase using the service account JSON
           echo "Authenticating with Firebase..."
-          export GOOGLE_APPLICATION_CREDENTIALS="$(echo $GOOGLE_APPLICATION_CREDENTIALS | base64 --decode)"
           echo "$GOOGLE_APPLICATION_CREDENTIALS" > /tmp/service-account.json
           export GOOGLE_APPLICATION_CREDENTIALS="/tmp/service-account.json"
 
