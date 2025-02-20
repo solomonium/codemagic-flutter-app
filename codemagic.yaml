@@ -5,20 +5,6 @@ workflows:
       flutter: stable
       xcode: latest
       vars:
-        GOOGLE_APPLICATION_CREDENTIALS: |
-          {
-            "type": "service_account",
-            "project_id": "codemagic-flutter-app-22ed7",
-            "private_key_id": "bebf4ce721d2cb63dd7f9324e94bb83f2ee356cb",
-            "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCq6iPdYhd93hO7\naDrtz6nlnnRlbWCbKr6VkWLcjmGo0A+EfK3vF1Nx+CwPf8PHdE9W656YawPHryv4\nOuq4KmvLplCqHQ9LO5tF81Mw6BDeoemwe1UwL0s1kW03bPqe3zGorwfW0Bn9urhc\nW53bmiRO99VlGokbt1ORPXM9HrOgnxbPZvgcCV2bO21bxNxKMaS/D1mcar2he+3S\nxdO+Ez7lAnJu66G5JgKPKd0vRDfLxDpqfQDZh2kA3mzpe8v0x6TL9OK2QihNihEg\nc9HPFWR5KJduevIRPxSfltba+1QEy+VzeqL1wUGnuyKXQtUjGG74lkgk6dzfd1dN\n8YOhn7FXAgMBAAECggEAHi1sOrUMp80z17WuHfo6KdBiBdybn5oa/4almYLMTIW8\nD60B+wK32ZozkWMCOu/W6GZ+4LOYfcP4tAIXGoBm+xS5DmhGIIb8QgwWBr8a52xY\nOjB0mKbpFSLB0XT9BVssRfftnuishifXUHtesn0TZxwMQic+yTWD3FOoysRme/gB\nGCgk4Cdqcks1ZPp82NbH6dG0N0Lw8J/gjh4FUGXvt+BX8qFEH+mhScDP55r/4EHn\nunDmHeMcTXaheuGxVZIEm2OkT1wfFOH+wVhITHfiMgsmhWGGV+tFVeWnnkTiWmLH\nzG+WSxzhvdYCKP2gAFUREBdbQjUrQrTjhB8zL+3Q2QKBgQDbYuHfqs95NK9QJv3I\no5cConI16X0Pq5/TZwOcwKRHp6EogwduJRpB0qCsgE/kuQDfs2IXrfOoh1T8si7J\n7JzIa7JcWx6eNw0vTsiBMZvs0kOUPbNCMECT5Fe841HRslrpCwwUcDbpgX8R3H0a\nXnin5dXu4wTeVmqzbewzSCXprwKBgQDHcFeK99cQqinwDF8713XnKAyKaD9o4P2P\njY+4R8ujRlxZHBUTy1C9cVNQ/xCnYSxJG8ZEBj0wrr6zlM0bthUFbYoW4GZxDiJz\nMeTMlrNh81hZ2M4920XSo6nKcmQmVp6k+Mcqpw2pGAD5Wzcn78CFwCqy43wej8WF\nEXCBbWAk2QKBgQDHK6x4jPAyz7vhfqSkRLBSOfyKKWHamitNl5ZV9yatzuemid5z\nBsghvgEU2qCtu6+pZ4fEi65L8CEeEP4dX+yun+ebpTXU2ZHkwxeRAuLWS8YCjUly\n66+VFJb66z1arRuPuvHKlF2l/GTKaGxDRkUv2J8yc3P2DmpsX30yyWtyDQKBgA/5\nNnnB6e7CwkMgqov/cMkH0yFOwi1jP8u8mdM3pN655vGYJzQDp77Ukci99RaC2Oou\nGE4gdcwtYsa9V0Qt7DcYE+RLKslJSYcSavHb7BgfRmdDzxjzM/9v7kxxpwXPEDvE\nVSdcY+K0MnfGT3+aW0AbKRBU2f8UosxKnkkvenDZAoGAKZnd1nzx0XzPVtTasTLo\nu3QHaXxcTEEXNlg/S45BKKhAYb8MUZ7CnjT54uGWeswLbVxMWvSVoTRklFniZm69\nuPEmJVanFixcEePTfiGDgrn7XwQY/SK9fUZf778VMl1Stkfi5gBuC2DNrjgm06w9\nlTjAVxU03eEj/cgeH+0Pspg=\n-----END PRIVATE KEY-----\n",
-            "client_email": "firebase-adminsdk-fbsvc@codemagic-flutter-app-22ed7.iam.gserviceaccount.com",
-            "client_id": "104549913271827542483",
-            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-            "token_uri": "https://oauth2.googleapis.com/token",
-            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-            "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40codemagic-flutter-app-22ed7.iam.gserviceaccount.com",
-            "universe_domain": "googleapis.com"
-          }
         FIREBASE_APP_ID: 1:947149653644:ios:f65e080c90dfff03f99da9
     scripts:
       - name: Install Flutter dependencies
