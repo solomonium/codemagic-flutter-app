@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 9,
+            "activePatchIndex": 10,
             "patches": [
                 {
                     "date": 1740023239870,
@@ -44,6 +44,10 @@
                 {
                     "date": 1740034554341,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,9 @@\n       - build/ios/ipa/*.ipa\n \n     publishing:\n       firebase:\n-        firebase_token: $FIREBASE_TOKEN\n+        credentials: $GOOGLE_APPLICATION_CREDENTIALS\n         app_id: $FIREBASE_APP_ID\n         groups: testers\n         release_notes: \"Build ${CM_BUILD_NUMBER} - Default Flutter App\"\n       email:\n"
+                },
+                {
+                    "date": 1740036531856,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n \n     publishing:\n       firebase:\n         credentials: $GOOGLE_APPLICATION_CREDENTIALS\n-        app_id: $FIREBASE_APP_ID\n+        app_id: 1:947149653644:ios:f65e080c90dfff03f99da9\n         groups: testers\n         release_notes: \"Build ${CM_BUILD_NUMBER} - Default Flutter App\"\n       email:\n         recipients:\n"
                 }
             ],
             "date": 1740023239870,

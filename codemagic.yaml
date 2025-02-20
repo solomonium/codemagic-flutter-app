@@ -21,9 +21,9 @@ workflows:
     publishing:
       firebase:
         credentials: $GOOGLE_APPLICATION_CREDENTIALS
-        app_id: $FIREBASE_APP_ID
+        app_id: 1:947149653644:ios:f65e080c90dfff03f99da9
         groups: testers
-        release_notes: "Build ${CM_BUILD_NUMBER} - Default Flutter App"
+        release_notes: "Build ${CM_BUILD_NUMBER} - iOS App"
       email:
         recipients:
           - laleye.solomon@yahoo.com
