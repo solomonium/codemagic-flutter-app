@@ -24,7 +24,7 @@ workflows:
 
     publishing:
       firebase:
-        service_account: $GOOGLE_APPLICATION_CREDENTIALS
+        serviceAccount: $FIREBASE_SERVICE_ACCOUNT
         app_id: $FIREBASE_APP_ID
         groups: testers
         release_notes: "Build ${CM_BUILD_NUMBER} - iOS App"
