@@ -42,7 +42,7 @@ workflows:
 
           # Verify authentication
           echo "Verifying Firebase authentication..."
-          firebase projects:list --token "$(cat /tmp/service-account.json | jq -r '.private_key')"
+          firebase login --cred-file /tmp/service-account.json
 
           # Distribute the app bundle
           echo "Distributing app bundle to Firebase App Distribution..."
