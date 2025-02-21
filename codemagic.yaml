@@ -32,9 +32,9 @@ workflows:
 
       - name: Distribute to Firebase
         script: |
-          echo "$GOOGLE_APPLICATION_CREDENTIALS_BASE64" | base64 --decode > /tmp/service-account.json
+          echo "$GOOGLE_APPLICATION_CREDENTIALS_BASE64" | base64 -d > /tmp/service-account.json
 
-          firebase login:ci --cred-file /tmp/service-account.json
+          export GOOGLE_APPLICATION_CREDENTIALS="/tmp/service-account.json"
 
           firebase appdistribution:distribute build/ios/ipa/app.ipa \
             --app "$FIREBASE_APP_ID" \
@@ -49,8 +49,6 @@ workflows:
         recipients:
           - laleye.solomon@yahoo.com
           - laleyesolomon2@gmail.com
-          - laleyesolomon3@gmail.com
-          - nihal@nevercode.io
         notify:
           success: true
           failure: true
