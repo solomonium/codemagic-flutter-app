@@ -11,46 +11,69 @@ workflows:
       xcode: latest
       cocoapods: default
     scripts:
-      - name: Get Flutter packages
-        script: |
-          flutter packages pub get
+      - name: Install Flutter packages
+        script: flutter pub get
 
-      - name: Install pods
+      - name: Install CocoaPods
         script: |
-          find . -name "Podfile" -execdir pod install \;
+          cd ios
+          pod install
+          cd ..
 
-      - name: Flutter build ipa
+      - name: Build IPA
         script: |
           flutter build ipa --release --no-codesign
-          mkdir -p build/ios/ipa
-          cp -r build/ios/iphoneos/Runner.app build/ios/ipa/ || echo "No IPA files found"
+          mkdir -p build/ios/ipa/Payload
+          cp -r build/ios/iphoneos/Runner.app build/ios/ipa/Payload/
+          cd build/ios/ipa
+          zip -r app.ipa Payload
+          rm -rf Payload
+          echo "IPA generated at build/ios/ipa/app.ipa"
 
-      - name: Distribute to Firebase App Distribution
+      - name: Distribute to Firebase
         script: |
-          if ! command -v firebase &> /dev/null; then
-            echo "Installing Firebase CLI..."
-            npm install -g firebase-tools
-          else
-            echo "Firebase CLI is already installed."
-          fi
+          # Install required tools
+          brew install curl jq || true
 
-          echo "Decoding service account JSON..."
+          # Decode service account JSON
           echo "$GOOGLE_APPLICATION_CREDENTIALS_BASE64" | base64 --decode > /tmp/service-account.json
           export GOOGLE_APPLICATION_CREDENTIALS="/tmp/service-account.json"
 
-          echo "Verifying Firebase authentication..."
-          firebase login:ci --non-interactive --token "$(cat /tmp/service-account.json | jq -r '.private_key')"
+          # Get Firebase access token
+          ACCESS_TOKEN=$(curl -s "https://oauth2.googleapis.com/token" \
+            -d "grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=$(python3 -c 'import json, time, jwt; service_account = json.load(open("/tmp/service-account.json")); print(jwt.encode({"iss": service_account["client_email"], "scope": "https://www.googleapis.com/auth/cloud-platform", "aud": "https://oauth2.googleapis.com/token", "exp": int(time.time()) + 3600, "iat": int(time.time())}, service_account["private_key"], algorithm="RS256"))')" \
+            | jq -r '.access_token')
 
-          echo "Distributing app bundle to Firebase App Distribution..."
-          firebase appdistribution:distribute build/ios/ipa/Runner.app \
-            --app $FIREBASE_APP_ID \
-            --groups "testers" \
-            --release-notes "Build ${CM_BUILD_NUMBER} - Unsigned iOS App"
-          artifacts:
-            - build/ios/ipa/Runner.app
+          # Upload and distribute IPA
+          UPLOAD_RESPONSE=$(curl -X POST \
+            -H "Authorization: Bearer $ACCESS_TOKEN" \
+            -H "Content-Type: application/octet-stream" \
+            --data-binary @build/ios/ipa/app.ipa \
+            "https://firebaseappdistribution.googleapis.com/upload/v1/projects/-/apps/$FIREBASE_APP_ID/releases:upload")
+
+          UPLOAD_TOKEN=$(echo "$UPLOAD_RESPONSE" | jq -r '.token')
+          if [ -z "$UPLOAD_TOKEN" ]; then
+            echo "❌ Failed to upload IPA: $UPLOAD_RESPONSE"
+            exit 1
+          fi
+
+          DISTRIBUTE_RESPONSE=$(curl -X POST \
+            -H "Authorization: Bearer $ACCESS_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"testerGroups\": [\"testers\"], \"releaseNotes\": {\"text\": \"Build $CM_BUILD_NUMBER - Unsigned IPA\"}}" \
+            "https://firebaseappdistribution.googleapis.com/v1/projects/-/apps/$FIREBASE_APP_ID/releases:distribute?upload_token=$UPLOAD_TOKEN")
+
+          if echo "$DISTRIBUTE_RESPONSE" | grep -q "error"; then
+            echo "❌ Distribution failed: $DISTRIBUTE_RESPONSE"
+            exit 1
+          else
+            echo "✅ IPA distributed successfully!"
+          fi
+
+    artifacts:
+      - build/ios/ipa/app.ipa
 
     publishing:
-      # Email notifications
       email:
         recipients:
           - laleye.solomon@yahoo.com
@@ -59,4 +82,4 @@ workflows:
           - nihal@nevercode.io
         notify:
           success: true
-          failure: false
+          failure: true
