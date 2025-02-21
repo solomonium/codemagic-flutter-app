@@ -32,18 +32,21 @@ workflows:
             exit 1
           else
             echo "GOOGLE_APPLICATION_CREDENTIALS_BASE64 is set"
+            echo "Length of GOOGLE_APPLICATION_CREDENTIALS_BASE64: ${#GOOGLE_APPLICATION_CREDENTIALS_BASE64}"
+          fi
+
+          CLEAN_BASE64=$(echo "$GOOGLE_APPLICATION_CREDENTIALS_BASE64" | tr -d '\n')
+          echo "$CLEAN_BASE64" | base64 -d > /tmp/service-account.json
+
+          if ! jq empty /tmp/service-account.json; then
+            echo "Error: Decoded service account JSON is invalid"
+            exit 1
+          else
+            echo "Service account JSON is valid"
           fi
 
       - name: Distribute to Firebase
         script: |
-          echo "$GOOGLE_APPLICATION_CREDENTIALS_BASE64" | base64 -d > /tmp/service-account.json
-
-          # Validate the JSON file
-          if ! jq empty /tmp/service-account.json; then
-            echo "Error: Decoded service account JSON is invalid"
-            exit 1
-          fi
-
           export GOOGLE_APPLICATION_CREDENTIALS="/tmp/service-account.json"
 
           firebase appdistribution:distribute build/ios/ipa/Runner.ipa \
