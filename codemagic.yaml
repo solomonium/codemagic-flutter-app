@@ -9,7 +9,6 @@ workflows:
       cocoapods: default
       vars:
         FIREBASE_APP_ID: "1:947149653644:ios:f65e080c90dfff03f99da9"
-      secure:
         GOOGLE_APPLICATION_CREDENTIALS_BASE64: Encrypted_Service_Account_JSON
 
     scripts:
