@@ -24,6 +24,9 @@ workflows:
         script: |
           flutter build ipa --release --no-codesign
 
+          echo "Directory structure after flutter build:"
+          ls -R build/ios
+
           mkdir -p build/ios/ipa/Payload
           cp -r build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app build/ios/ipa/Payload/
 
@@ -31,8 +34,11 @@ workflows:
           ls -R build/ios/ipa
 
           cd build/ios/ipa
-          zip -r ../app.ipa Payload
+          zip -r app.ipa Payload
           rm -rf Payload
+
+          echo "Directory structure after copying .app file:"
+          ls -R build/ios/ipa
 
           if [ ! -f "build/ios/ipa/app.ipa" ]; then
             echo "Error: IPA file not found at build/ios/ipa/app.ipa"
