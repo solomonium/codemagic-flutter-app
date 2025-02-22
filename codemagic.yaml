@@ -6,7 +6,7 @@ workflows:
     environment:
       vars:
         FIREBASE_APP_ID: "1:947149653644:ios:f65e080c90dfff03f99da9"
-        FIREBASE_TOKEN: $FIREBASE_TOKEN # Use the Firebase CI token
+        FIREBASE_TOKEN: $FIREBASE_TOKEN
       flutter: stable
       xcode: latest
       cocoapods: default
@@ -26,6 +26,9 @@ workflows:
 
           mkdir -p build/ios/ipa/Payload
           cp -r build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app build/ios/ipa/Payload/
+
+          echo "Directory structure after copying .app file:"
+          ls -R build/ios/ipa
 
           cd build/ios/ipa
           zip -r app.ipa Payload
