@@ -24,11 +24,17 @@ workflows:
         script: |
           flutter build ipa --release --no-codesign
 
-          if [ ! -f "build/ios/ipa/Runner.ipa" ]; then
-            echo "Error: IPA file not found at build/ios/ipa/Runner.ipa"
+          mkdir -p build/ios/ipa/Payload
+          cp -r build/ios/iphoneos/Runner.app build/ios/ipa/Payload/
+          cd build/ios/ipa
+          zip -r app.ipa Payload
+          rm -rf Payload
+
+          if [ ! -f "build/ios/ipa/app.ipa" ]; then
+            echo "Error: IPA file not found at build/ios/ipa/app.ipa"
             exit 1
           else
-            echo "✅ IPA generated at build/ios/ipa/Runner.ipa"
+            echo "✅ IPA generated at build/ios/ipa/app.ipa"
           fi
 
       - name: Distribute to Firebase
@@ -37,21 +43,21 @@ workflows:
 
           echo "FIREBASE_TOKEN: ${FIREBASE_TOKEN:0:10}..."
 
-          if [ ! -f "build/ios/ipa/Runner.ipa" ]; then
-            echo "Error: IPA file not found at build/ios/ipa/Runner.ipa"
+          if [ ! -f "build/ios/ipa/app.ipa" ]; then
+            echo "Error: IPA file not found at build/ios/ipa/app.ipa"
             exit 1
           else
-            echo "IPA file found at build/ios/ipa/Runner.ipa"
+            echo "IPA file found at build/ios/ipa/app.ipa"
           fi
 
-          firebase appdistribution:distribute build/ios/ipa/Runner.ipa \
+          firebase appdistribution:distribute build/ios/ipa/app.ipa \
             --app "$FIREBASE_APP_ID" \
             --token "$FIREBASE_TOKEN" \
             --groups "testers" \
             --release-notes "Build $CM_BUILD_NUMBER - Unsigned IPA"
 
     artifacts:
-      - build/ios/ipa/Runner.ipa
+      - build/ios/ipa/app.ipa
 
     publishing:
       email:
