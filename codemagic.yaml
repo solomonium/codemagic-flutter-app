@@ -11,10 +11,9 @@ workflows:
       cocoapods: default
       groups:
         - firebase
-      scripts:
-        - |
-          echo "$GOOGLE_APPLICATION_CREDENTIALS_JSON" > /tmp/service_account.json
-          export GOOGLE_APPLICATION_CREDENTIALS=/tmp/service_account.json
+      scripts: |
+        echo "$GOOGLE_APPLICATION_CREDENTIALS_JSON" > /tmp/service_account.json
+        export GOOGLE_APPLICATION_CREDENTIALS=/tmp/service_account.json
 
     scripts:
       - name: Install Flutter packages
