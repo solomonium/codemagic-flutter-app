@@ -4,26 +4,29 @@ workflows:
     instance_type: mac_mini_m2
     max_build_duration: 120
     environment:
-      vars:
-        FIREBASE_APP_ID: "1:947149653644:ios:f65e080c90dfff03f99da9"
       flutter: stable
       xcode: latest
       cocoapods: default
-      groups:
-        - firebase
-      scripts: |
-        echo "$GOOGLE_APPLICATION_CREDENTIALS_JSON" > /tmp/service_account.json
-        export GOOGLE_APPLICATION_CREDENTIALS=/tmp/service_account.json
+      vars:
+        FIREBASE_APP_ID: "1:947149653644:ios:f65e080c90dfff03f99da9"
+      secure:
+        GOOGLE_APPLICATION_CREDENTIALS_BASE64: Encrypted_Service_Account_JSON
 
     scripts:
-      - name: Install Flutter packages
+      - name: Install Flutter dependencies
         script: flutter pub get
 
-      - name: Install CocoaPods
+      - name: Install CocoaPods dependencies
         script: |
           cd ios
           pod install
           cd ..
+
+      - name: Write Service Account JSON to a File
+        script: |
+          echo $GOOGLE_APPLICATION_CREDENTIALS_JSON | base64 --decode > /tmp/service_account.json
+          export GOOGLE_APPLICATION_CREDENTIALS=/tmp/service_account.json
+          echo "Service account JSON file created at /tmp/service_account.json"
 
       - name: Build IPA
         script: |
@@ -33,7 +36,7 @@ workflows:
         script: |
           firebase appdistribution:distribute build/ios/ipa/*.ipa \
             --app "$FIREBASE_APP_ID" \
-            --service-account "/tmp/service_account.json" \
+            --service-credentials "/tmp/service_account.json" \
             --groups "testers" \
             --release-notes "Build $CM_BUILD_NUMBER - Unsigned IPA"
 
