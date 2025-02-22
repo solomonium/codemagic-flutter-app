@@ -6,10 +6,16 @@ workflows:
     environment:
       vars:
         FIREBASE_APP_ID: "1:947149653644:ios:f65e080c90dfff03f99da9"
-        FIREBASE_TOKEN: $FIREBASE_TOKEN # Use the Firebase CI token
       flutter: stable
       xcode: latest
       cocoapods: default
+      groups:
+        - firebase
+      scripts:
+        - |
+          echo "$GOOGLE_APPLICATION_CREDENTIALS_JSON" > /tmp/service_account.json
+          export GOOGLE_APPLICATION_CREDENTIALS=/tmp/service_account.json
+
     scripts:
       - name: Install Flutter packages
         script: flutter pub get
@@ -20,72 +26,20 @@ workflows:
           pod install
           cd ..
 
-      - name: Build IPA (Unsigned)
+      - name: Build IPA
         script: |
-          # Build the .app file using xcodebuild
-          xcodebuild -workspace ios/Runner.xcworkspace \
-            -scheme Runner \
-            -configuration Release \
-            -sdk iphoneos \
-            -derivedDataPath build/ios \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO
-
-          # Debug: Print the directory structure
-          echo "Directory structure after xcodebuild:"
-          ls -R build/ios
-
-          # Create the .ipa file manually
-          mkdir -p build/ios/ipa/Payload
-          cp -r build/ios/Build/Products/Release-iphoneos/Runner.app build/ios/ipa/Payload/
-
-          # Debug: Verify the .app file was copied
-          echo "Directory structure after copying .app file:"
-          ls -R build/ios/ipa
-
-          # Create the .ipa file
-          cd build/ios/ipa
-          zip -r app.ipa Payload
-          rm -rf Payload
-
-          # Debug: Verify the .ipa file was created
-          echo "Directory structure after creating .ipa file:"
-          ls -R build/ios/ipa
-
-          # Verify the IPA file exists
-          if [ ! -f "build/ios/ipa/app.ipa" ]; then
-            echo "Error: IPA file not found at build/ios/ipa/app.ipa"
-            exit 1
-          else
-            echo "✅ IPA generated at build/ios/ipa/app.ipa"
-          fi
+          flutter build ipa --no-codesign
 
       - name: Distribute to Firebase
         script: |
-          # Debug: Print the Firebase App ID
-          echo "FIREBASE_APP_ID: $FIREBASE_APP_ID"
-
-          # Debug: Print the Firebase CI token (first 10 characters for security)
-          echo "FIREBASE_TOKEN: ${FIREBASE_TOKEN:0:10}..."
-
-          # Debug: Verify the IPA file exists
-          if [ ! -f "build/ios/ipa/app.ipa" ]; then
-            echo "Error: IPA file not found at build/ios/ipa/app.ipa"
-            exit 1
-          else
-            echo "IPA file found at build/ios/ipa/app.ipa"
-          fi
-
-          # Distribute the IPA using Firebase App Distribution
-          firebase appdistribution:distribute build/ios/ipa/app.ipa \
+          firebase appdistribution:distribute build/ios/ipa/*.ipa \
             --app "$FIREBASE_APP_ID" \
-            --token "$FIREBASE_TOKEN" \
+            --service-account "/tmp/service_account.json" \
             --groups "testers" \
             --release-notes "Build $CM_BUILD_NUMBER - Unsigned IPA"
 
     artifacts:
-      - build/ios/ipa/app.ipa
+      - build/ios/ipa/*.ipa
 
     publishing:
       email:
