@@ -20,10 +20,16 @@ workflows:
           pod install
           cd ..
 
-      - name: Build IPA
+      - name: Build IPA (Unsigned)
         script: |
-          flutter build ipa --release
-          echo "✅ IPA generated at build/ios/ipa/Runner.ipa"
+          flutter build ipa --release --no-codesign
+
+          if [ ! -f "build/ios/ipa/Runner.ipa" ]; then
+            echo "Error: IPA file not found at build/ios/ipa/Runner.ipa"
+            exit 1
+          else
+            echo "✅ IPA generated at build/ios/ipa/Runner.ipa"
+          fi
 
       - name: Distribute to Firebase
         script: |
