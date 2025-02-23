@@ -27,10 +27,10 @@ workflows:
           echo "GOOGLE_APPLICATION_CREDENTIALS_JSON: $GOOGLE_APPLICATION_CREDENTIALS_JSON"
           echo "✅ Firebase authentication successful"
 
-      - name: Build iOS App (Unsigned)
+      - name: Build iOS App
         script: |
           flutter clean
-          flutter build ios --no-codesign
+          flutter build ios --release
 
       - name: Create IPA Package
         script: |
