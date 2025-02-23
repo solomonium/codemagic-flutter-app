@@ -24,8 +24,16 @@ workflows:
       - name: Write Service Account JSON to a File
         script: |
           echo "$GOOGLE_APPLICATION_CREDENTIALS_JSON" | base64 --decode > /tmp/service_account.json
-          export GOOGLE_APPLICATION_CREDENTIALS_JSON=/tmp/service_account.json
-          echo "✅ Service account JSON file created at /tmp/service_account.json"
+          export GOOGLE_APPLICATION_CREDENTIALS=/tmp/service_account.json
+
+          if [ ! -s /tmp/service_account.json ]; then
+            echo "❌ Error: Service account JSON file is empty or not created properly!"
+            exit 1
+          fi
+
+          echo "✅ Service account JSON file successfully created!"
+          echo "🔍 First few lines of service_account.json for verification:"
+          head -n 5 /tmp/service_account.json
 
       - name: Authenticate with Firebase
         script: |
@@ -33,6 +41,9 @@ workflows:
             echo "❌ Error: Service account JSON not found!"
             exit 1
           fi
+
+          echo "🔍 Checking JSON content..."
+          jq '.' /tmp/service_account.json || { echo "❌ Invalid JSON format!"; exit 1; }
 
           gcloud auth activate-service-account --key-file=/tmp/service_account.json
           gcloud config set project $(jq -r '.project_id' /tmp/service_account.json)
@@ -42,6 +53,8 @@ workflows:
 
           if [ $? -ne 0 ]; then
             echo "❌ Firebase authentication failed. Ensure the service account has App Distribution permissions."
+            echo "🔍 Debugging Service Account JSON:"
+            jq '{client_email, project_id, private_key_id}' /tmp/service_account.json
             exit 1
           fi
 
