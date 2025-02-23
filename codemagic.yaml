@@ -30,7 +30,13 @@ workflows:
       - name: Build iOS App
         script: |
           flutter clean
-          flutter build ios --release
+          flutter build ios
+          xcodebuild -workspace ios/Runner.xcworkspace \
+            -scheme Runner \
+            -sdk iphoneos \
+            -configuration Release \
+            -allowProvisioningUpdates \
+            build
 
       - name: Create IPA Package
         script: |
