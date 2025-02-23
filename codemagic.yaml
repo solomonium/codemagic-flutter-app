@@ -23,14 +23,28 @@ workflows:
 
       - name: Write Service Account JSON to a File
         script: |
-          echo "$GOOGLE_APPLICATION_CREDENTIALS_JSON" | base64 --decode > /tmp/service_account.json
+          echo "$GOOGLE_APPLICATION_CREDENTIALS_BASE64" | base64 --decode > /tmp/service_account.json
           export GOOGLE_APPLICATION_CREDENTIALS=/tmp/service_account.json
           echo "✅ Service account JSON file created at /tmp/service_account.json"
 
       - name: Authenticate with Firebase
         script: |
+          if [ ! -f /tmp/service_account.json ]; then
+            echo "❌ Error: Service account JSON not found!"
+            exit 1
+          fi
+
           gcloud auth activate-service-account --key-file=/tmp/service_account.json
           gcloud config set project $(jq -r '.project_id' /tmp/service_account.json)
+
+          echo "🔄 Verifying authentication..."
+          firebase projects:list
+
+          if [ $? -ne 0 ]; then
+            echo "❌ Firebase authentication failed. Ensure the service account has App Distribution permissions."
+            exit 1
+          fi
+
           echo "✅ Firebase authentication successful"
 
       - name: Build iOS App (Unsigned)
