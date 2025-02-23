@@ -24,7 +24,7 @@ workflows:
       - name: Write Service Account JSON to a File
         script: |
           echo "$GOOGLE_APPLICATION_CREDENTIALS_BASE64" | base64 --decode > /tmp/service_account.json
-          export GOOGLE_APPLICATION_CREDENTIALS=/tmp/service_account.json
+          export GOOGLE_APPLICATION_CREDENTIALS_JSON=/tmp/service_account.json
           echo "✅ Service account JSON file created at /tmp/service_account.json"
 
       - name: Authenticate with Firebase
