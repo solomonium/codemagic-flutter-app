@@ -7,10 +7,18 @@ workflows:
       flutter: stable
       xcode: latest
       cocoapods: default
-      groups: testers
+      groups: 
+        - testers
       # vars:
       #   FIREBASE_APP_ID: "1:947149653644:ios:f65e080c90dfff03f99da9"
       #   FIREBASE_TOKEN: Encrypted_Firebase_Token # Add in Codemagic UI
+
+    scripts:
+      - name: Check Environment Variables
+        script: |
+          echo $FIREBASE_TOKEN
+          echo $FIREBASE_APP_ID
+          echo $GOOGLE_APPLICATION_CREDENTIALS_JSON
 
     scripts:
       - name: Install Flutter dependencies
