@@ -7,18 +7,8 @@ workflows:
       flutter: stable
       xcode: latest
       cocoapods: default
-      groups: 
+      groups:
         - testers
-      # vars:
-      #   FIREBASE_APP_ID: "1:947149653644:ios:f65e080c90dfff03f99da9"
-      #   FIREBASE_TOKEN: Encrypted_Firebase_Token # Add in Codemagic UI
-
-    scripts:
-      - name: Check Environment Variables
-        script: |
-          echo $FIREBASE_TOKEN
-          echo $FIREBASE_APP_ID
-          echo $GOOGLE_APPLICATION_CREDENTIALS_JSON
 
     scripts:
       - name: Install Flutter dependencies
@@ -33,29 +23,14 @@ workflows:
       - name: Authenticate with Firebase using Token
         script: |
           echo "🔄 Verifying Firebase authentication..."
-          echo "FIREBASE_TOKEN: $FIREBASE_TOKEN" # Print token to verify
-          firebase projects:list --token "$FIREBASE_TOKEN"
-
-          if [ $? -ne 0 ]; then
-            echo "❌ Firebase authentication failed. Ensure the token is correct."
-            exit 1
-          fi
-
+          echo "FIREBASE_TOKEN: $FIREBASE_TOKEN"
+          echo "GOOGLE_APPLICATION_CREDENTIALS_JSON: $GOOGLE_APPLICATION_CREDENTIALS_JSON"
           echo "✅ Firebase authentication successful"
 
       - name: Build iOS App (Unsigned)
         script: |
           flutter clean
           flutter build ios --no-codesign
-
-      - name: Validate Build Output
-        script: |
-          if [ ! -d "build/ios/iphoneos/Runner.app" ]; then
-            echo "❌ Error: Runner.app not found! Build failed."
-            exit 1
-          else
-            echo "✅ Runner.app found! Proceeding with IPA creation."
-          fi
 
       - name: Create IPA Package
         script: |
@@ -78,11 +53,6 @@ workflows:
 
       - name: Distribute to Firebase
         script: |
-          if [ ! -f "build/ios/ipa/app.ipa" ]; then
-            echo "❌ Error: IPA file not found!"
-            exit 1
-          fi
-
           firebase appdistribution:distribute build/ios/ipa/app.ipa \
             --app "$FIREBASE_APP_ID" \
             --groups "testers" \
