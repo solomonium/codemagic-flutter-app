@@ -9,7 +9,7 @@ workflows:
       cocoapods: default
       vars:
         FIREBASE_APP_ID: "1:947149653644:ios:f65e080c90dfff03f99da9"
-        GOOGLE_APPLICATION_CREDENTIALS_BASE64: Encrypted_Service_Account_JSON # Add in Codemagic UI
+        GOOGLE_APPLICATION_CREDENTIALS_JSON: Encrypted_Service_Account_JSON # Add in Codemagic UI
 
     scripts:
       - name: Install Flutter dependencies
@@ -23,7 +23,7 @@ workflows:
 
       - name: Write Service Account JSON to a File
         script: |
-          echo "$GOOGLE_APPLICATION_CREDENTIALS_BASE64" | base64 --decode > /tmp/service_account.json
+          echo "$GOOGLE_APPLICATION_CREDENTIALS_JSON" | base64 --decode > /tmp/service_account.json
           export GOOGLE_APPLICATION_CREDENTIALS_JSON=/tmp/service_account.json
           echo "✅ Service account JSON file created at /tmp/service_account.json"
 
