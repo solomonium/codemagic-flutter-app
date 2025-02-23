@@ -9,7 +9,7 @@ workflows:
       cocoapods: default
       vars:
         FIREBASE_APP_ID: "1:947149653644:ios:f65e080c90dfff03f99da9"
-        GOOGLE_APPLICATION_CREDENTIALS_BASE64: Encrypted_Service_Account_JSON
+        GOOGLE_APPLICATION_CREDENTIALS_BASE64: Encrypted_Service_Account_JSON # Add in Codemagic UI
 
     scripts:
       - name: Install Flutter dependencies
@@ -25,24 +25,36 @@ workflows:
         script: |
           echo "$GOOGLE_APPLICATION_CREDENTIALS_JSON" | base64 --decode > /tmp/service_account.json
           export GOOGLE_APPLICATION_CREDENTIALS=/tmp/service_account.json
-          echo "Service account JSON file created at /tmp/service_account.json"
+          echo "✅ Service account JSON file created at /tmp/service_account.json"
 
       - name: Build iOS App (Unsigned)
         script: |
+          flutter clean
           flutter build ios --no-codesign
 
-      - name: Package .app into .ipa (Manually)
+      - name: Validate Build Output
         script: |
-          mkdir -p build/ios/ipa/Payload
-          cp -r build/ios/iphoneos/Runner.app build/ios/ipa/Payload/
-          cd build/ios/ipa
-          zip -r app.ipa Payload
-          rm -rf Payload
-          cd ../../../..
+          if [ ! -d "build/ios/iphoneos/Runner.app" ]; then
+            echo "❌ Error: Runner.app not found! Build failed."
+            exit 1
+          else
+            echo "✅ Runner.app found! Proceeding with IPA creation."
+          fi
 
-          # Debug: Check if IPA was created
-          if [ -f "build/ios/ipa/app.ipa" ]; then
-            echo "✅ IPA successfully created at build/ios/ipa/app.ipa"
+      - name: Create IPA Package
+        script: |
+          IPA_DIR="build/ios/ipa"
+          APP_PATH="build/ios/iphoneos/Runner.app"
+          IPA_PATH="$IPA_DIR/app.ipa"
+
+          mkdir -p "$IPA_DIR"
+          rm -rf Payload
+          mkdir Payload
+          cp -R "$APP_PATH" Payload/
+          zip -r "$IPA_PATH" Payload
+
+          if [ -f "$IPA_PATH" ]; then
+            echo "✅ IPA successfully created at $IPA_PATH"
           else
             echo "❌ Failed to create IPA"
             exit 1
