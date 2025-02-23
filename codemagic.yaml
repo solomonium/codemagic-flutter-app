@@ -27,6 +27,12 @@ workflows:
           export GOOGLE_APPLICATION_CREDENTIALS=/tmp/service_account.json
           echo "✅ Service account JSON file created at /tmp/service_account.json"
 
+      - name: Authenticate with Firebase
+        script: |
+          gcloud auth activate-service-account --key-file=/tmp/service_account.json
+          gcloud config set project $(jq -r '.project_id' /tmp/service_account.json)
+          echo "✅ Firebase authentication successful"
+
       - name: Build iOS App (Unsigned)
         script: |
           flutter clean
@@ -69,7 +75,6 @@ workflows:
 
           firebase appdistribution:distribute build/ios/ipa/app.ipa \
             --app "$FIREBASE_APP_ID" \
-            --service-account "/tmp/service_account.json" \
             --groups "testers" \
             --release-notes "Build $CM_BUILD_NUMBER - Unsigned IPA"
 
