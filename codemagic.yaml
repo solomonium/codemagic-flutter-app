@@ -7,9 +7,10 @@ workflows:
       flutter: stable
       xcode: latest
       cocoapods: default
-      vars:
-        FIREBASE_APP_ID: "1:947149653644:ios:f65e080c90dfff03f99da9"
-        FIREBASE_TOKEN: Encrypted_Firebase_Token # Add in Codemagic UI
+      groups: testers
+      # vars:
+      #   FIREBASE_APP_ID: "1:947149653644:ios:f65e080c90dfff03f99da9"
+      #   FIREBASE_TOKEN: Encrypted_Firebase_Token # Add in Codemagic UI
 
     scripts:
       - name: Install Flutter dependencies
@@ -24,6 +25,7 @@ workflows:
       - name: Authenticate with Firebase using Token
         script: |
           echo "🔄 Verifying Firebase authentication..."
+          echo "FIREBASE_TOKEN: $FIREBASE_TOKEN" # Print token to verify
           firebase projects:list --token "$FIREBASE_TOKEN"
 
           if [ $? -ne 0 ]; then
