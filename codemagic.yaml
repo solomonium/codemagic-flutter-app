@@ -11,6 +11,13 @@ workflows:
         - testers
 
     scripts:
+      - name: Set up keychain and provisioning profile
+        script: |
+          keychain initialize
+          app-store-connect fetch-signing-files "com.example.yourbundleid" --type IOS_APP_STORE
+          xcode-project use-profiles
+
+    scripts:
       - name: Install Flutter dependencies
         script: flutter pub get
 
@@ -30,6 +37,7 @@ workflows:
       - name: Build iOS App
         script: |
           flutter clean
+          flutter pub get
           flutter build ios
           xcodebuild -workspace ios/Runner.xcworkspace \
             -scheme Runner \
@@ -75,4 +83,4 @@ workflows:
           - laleyesolomon2@gmail.com
         notify:
           success: true
-          failure: true
+          failure: false
