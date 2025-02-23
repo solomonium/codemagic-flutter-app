@@ -9,7 +9,7 @@ workflows:
       cocoapods: default
       vars:
         FIREBASE_APP_ID: "1:947149653644:ios:f65e080c90dfff03f99da9"
-        GOOGLE_APPLICATION_CREDENTIALS_JSON: Encrypted_Service_Account_JSON # Add in Codemagic UI
+        FIREBASE_TOKEN: Encrypted_Firebase_Token # Add in Codemagic UI
 
     scripts:
       - name: Install Flutter dependencies
@@ -21,40 +21,13 @@ workflows:
           pod install
           cd ..
 
-      - name: Write Service Account JSON to a File
+      - name: Authenticate with Firebase using Token
         script: |
-          echo "$GOOGLE_APPLICATION_CREDENTIALS_JSON" | base64 --decode > /tmp/service_account.json
-          export GOOGLE_APPLICATION_CREDENTIALS=/tmp/service_account.json
-
-          if [ ! -s /tmp/service_account.json ]; then
-            echo "❌ Error: Service account JSON file is empty or not created properly!"
-            exit 1
-          fi
-
-          echo "✅ Service account JSON file successfully created!"
-          echo "🔍 First few lines of service_account.json for verification:"
-          head -n 5 /tmp/service_account.json
-
-      - name: Authenticate with Firebase
-        script: |
-          if [ ! -f /tmp/service_account.json ]; then
-            echo "❌ Error: Service account JSON not found!"
-            exit 1
-          fi
-
-          echo "🔍 Checking JSON content..."
-          jq '.' /tmp/service_account.json || { echo "❌ Invalid JSON format!"; exit 1; }
-
-          gcloud auth activate-service-account --key-file=/tmp/service_account.json
-          gcloud config set project $(jq -r '.project_id' /tmp/service_account.json)
-
-          echo "🔄 Verifying authentication..."
-          firebase projects:list
+          echo "🔄 Verifying Firebase authentication..."
+          firebase projects:list --token "$FIREBASE_TOKEN"
 
           if [ $? -ne 0 ]; then
-            echo "❌ Firebase authentication failed. Ensure the service account has App Distribution permissions."
-            echo "🔍 Debugging Service Account JSON:"
-            jq '{client_email, project_id, private_key_id}' /tmp/service_account.json
+            echo "❌ Firebase authentication failed. Ensure the token is correct."
             exit 1
           fi
 
@@ -103,7 +76,8 @@ workflows:
           firebase appdistribution:distribute build/ios/ipa/app.ipa \
             --app "$FIREBASE_APP_ID" \
             --groups "testers" \
-            --release-notes "Build $CM_BUILD_NUMBER - Unsigned IPA"
+            --release-notes "Build $CM_BUILD_NUMBER - Unsigned IPA" \
+            --token "$FIREBASE_TOKEN"
 
     artifacts:
       - build/ios/ipa/app.ipa
