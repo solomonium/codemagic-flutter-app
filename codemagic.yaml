@@ -14,7 +14,7 @@ workflows:
       - name: Set up keychain and provisioning profile
         script: |
           keychain initialize
-          app-store-connect fetch-signing-files "com.example.codemagicFlutterApp" --type IOS_APP_STORE
+          app-store-connect fetch-signing-files "com.codemagicFlutterApp.test" --type IOS_ADHOC
           xcode-project use-profiles
 
     scripts:
