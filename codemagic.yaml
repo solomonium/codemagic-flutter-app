@@ -9,6 +9,7 @@ workflows:
       cocoapods: default
       groups:
         - code-signing
+        - testers
       ios_signing:
         provisioning_profiles:
           - CodeMagicFlutterApp
