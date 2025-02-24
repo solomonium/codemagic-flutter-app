@@ -38,7 +38,7 @@ workflows:
           flutter clean
           flutter pub get
           flutter build ios --no-codesign
-          xcode-project build-ipa --export-method ad-hoc --allowProvisioningUpdates
+          xcode-project build-ipa
 
       - name: Distribute to Firebase
         script: |
