@@ -11,7 +11,8 @@ workflows:
         - code-signing
     integrations:
       app_store_connect: solomonappstorekey
-    ios_signing: |
+
+  ios_signing: |
       distribution_type: app_store
       bundle_identifier: com.codemagicFlutterApp.test
     scripts:
