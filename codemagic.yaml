@@ -12,9 +12,9 @@ workflows:
     integrations:
       app_store_connect: solomonappstorekey
 
-  ios_signing: |
-      distribution_type: app_store
-      bundle_identifier: com.codemagicFlutterApp.test
+  # ios_signing: |
+  #     distribution_type: app_store
+  #     bundle_identifier: com.codemagicFlutterApp.test
     scripts:
       - name: Set up code signing settings on Xcode project
         script: keychain initialize
