@@ -14,15 +14,14 @@ workflows:
     ios_signing: |
       distribution_type: app_store
       bundle_identifier: com.codemagicFlutterApp.test
-
     scripts:
       - name: Set up code signing settings on Xcode project
         script: keychain initialize
-
     scripts:
       - name: Add Certificates
         script: add-certificates
-
+    scripts:
+      - name: Use profiles
         script: xcode-project use-profiles
 
       - name: Install Flutter dependencies
