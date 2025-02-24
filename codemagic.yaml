@@ -14,10 +14,9 @@ workflows:
       - name: Set up keychain and provisioning profile
         script: |
           keychain initialize
-          app-store-connect fetch-signing-files "com.codemagicFlutterApp.test" --type IOS_ADHOC
+          app-store-connect fetch-signing-files "com.example.codemagicFlutterApp" --type IOS_ADHOC
           xcode-project use-profiles
 
-    scripts:
       - name: Install Flutter dependencies
         script: flutter pub get
 
@@ -38,43 +37,19 @@ workflows:
         script: |
           flutter clean
           flutter pub get
-          flutter build ios
-          xcodebuild -workspace ios/Runner.xcworkspace \
-            -scheme Runner \
-            -sdk iphoneos \
-            -configuration Release \
-            -allowProvisioningUpdates \
-            build
-
-      - name: Create IPA Package
-        script: |
-          IPA_DIR="build/ios/ipa"
-          APP_PATH="build/ios/iphoneos/Runner.app"
-          IPA_PATH="$IPA_DIR/app.ipa"
-
-          mkdir -p "$IPA_DIR"
-          rm -rf Payload
-          mkdir Payload
-          cp -R "$APP_PATH" Payload/
-          zip -r "$IPA_PATH" Payload
-
-          if [ -f "$IPA_PATH" ]; then
-            echo "✅ IPA successfully created at $IPA_PATH"
-          else
-            echo "❌ Failed to create IPA"
-            exit 1
-          fi
+          flutter build ios --no-codesign
+          xcode-project build-ipa --export-method ad-hoc --allowProvisioningUpdates
 
       - name: Distribute to Firebase
         script: |
-          firebase appdistribution:distribute build/ios/ipa/app.ipa \
+          firebase appdistribution:distribute build/ios/ipa/Runner.ipa \
             --app "$FIREBASE_APP_ID" \
             --groups "testers" \
-            --release-notes "Build $CM_BUILD_NUMBER - Unsigned IPA" \
+            --release-notes "Build $CM_BUILD_NUMBER - Signed IPA" \
             --token "$FIREBASE_TOKEN"
 
     artifacts:
-      - build/ios/ipa/app.ipa
+      - build/ios/ipa/Runner.ipa
 
     publishing:
       email:
