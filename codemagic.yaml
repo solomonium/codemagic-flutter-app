@@ -8,23 +8,22 @@ workflows:
       xcode: latest
       cocoapods: default
       groups:
-        - testers
+        - code-signing
+    integrations:
+      app_store_connect: solomonappstorekey
+    ios-signing: |
+      distribution_type: app_store
+      bundle_identifier: com.codemagicFlutterApp.test
 
     scripts:
-      - name: Set up keychain and provisioning profile
-        script: |
-          keychain initialize
-          app-store-connect fetch-signing-files "com.example.codemagicFlutterApp" --type ADHOC
-          xcode-project use-profiles
+      - name: Set up keychain to be used for code signing using Codemagic CLI 'keychain' command
+        script: keychain initialize
+        script: add-certificates
+
+        script: xcode-project use-profiles
 
       - name: Install Flutter dependencies
         script: flutter pub get
-
-      - name: Install CocoaPods dependencies
-        script: |
-          cd ios
-          pod install
-          cd ..
 
       - name: Authenticate with Firebase using Token
         script: |
@@ -33,12 +32,9 @@ workflows:
           echo "GOOGLE_APPLICATION_CREDENTIALS_JSON: $GOOGLE_APPLICATION_CREDENTIALS_JSON"
           echo "✅ Firebase authentication successful"
 
-      - name: Build iOS App
+      - name: Build IPA with automatic versioning
         script: |
-          flutter clean
-          flutter pub get
-          flutter build ios --no-codesign
-          xcode-project build-ipa
+          flutter build ipa --export-options-plist=/Users/builder/export_options.plist
 
       - name: Distribute to Firebase
         script: |
@@ -49,7 +45,9 @@ workflows:
             --token "$FIREBASE_TOKEN"
 
     artifacts:
+      - build/ios/ipa/*.ipa
       - build/ios/ipa/Runner.ipa
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
 
     publishing:
       email:
