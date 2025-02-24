@@ -19,6 +19,9 @@ workflows:
       - name: Add Certificates
         script: add-certificates
     scripts:
+      - name: Debug Provisioning Profiles
+        script: ls -al /Users/builder/Library/MobileDevice/Provisioning\ Profiles/
+
       - name: Use profiles
         script: xcode-project use-profiles
 
