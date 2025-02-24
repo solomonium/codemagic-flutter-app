@@ -9,9 +9,11 @@ workflows:
       cocoapods: default
       groups:
         - code-signing
-    integrations:
-      app_store_connect: solomonappstorekey
-
+      ios_signing:
+        provisioning_profiles:
+          - CodeMagicFlutterApp
+        certificates:
+          - CodemagicFlutterApp
     scripts:
       - name: Debug Certificates
         script: |
@@ -19,24 +21,11 @@ workflows:
           ls -al /Users/builder/Library/MobileDevice/Provisioning\ Profiles/
           ls -al /Users/builder/
 
-      - name: Set up keychain
-        script: keychain initialize
-
-      - name: Install Certificates Manually
-        script: |
-          echo "Importing certificates..."
-          security create-keychain -p "" build.keychain
-          security list-keychains -s build.keychain
-          security default-keychain -s build.keychain
-          security unlock-keychain -p "" build.keychain
-          security import /Users/builder/certificates.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
-
-      - name: Fetch Provisioning Profile
-        script: |
-          echo "Fetching provisioning profile from Codemagic..."
-          app-store-connect fetch-signing-files "com.codemagicFlutterApp.test" --type IOS_ADHOC
-          ls -al /Users/builder/Library/MobileDevice/Provisioning\ Profiles/
+      # - name: Fetch Provisioning Profile
+      #   script: |
+      #     echo "Fetching provisioning profile from Codemagic..."
+      #     app-store-connect fetch-signing-files "com.codemagicFlutterApp.test" --type IOS_ADHOC
+      #     ls -al /Users/builder/Library/MobileDevice/Provisioning\ Profiles/
 
       - name: Use Profiles
         script: xcode-project use-profiles
