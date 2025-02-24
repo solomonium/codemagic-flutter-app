@@ -25,13 +25,13 @@ workflows:
         script: |
           flutter build ipa --export-options-plist=/Users/builder/export_options.plist
 
-      - name: Distribute to Firebase
-        script: |
-          export GOOGLE_APPLICATION_CREDENTIALS=$CM_BUILD_DIR/service-account.json
-          firebase appdistribution:distribute build/ios/ipa/Runner.ipa \
-            --app "$FIREBASE_APP_ID" \
-            --groups "code-signing" \
-            --release-notes "Build $CM_BUILD_NUMBER - Signed IPA" \
+      # - name: Distribute to Firebase
+      #   script: |
+      #     firebase appdistribution:distribute build/ios/ipa/Runner.ipa \
+      #       --app "$FIREBASE_APP_ID" \
+      #       --groups "testers" \
+      #       --release-notes "Build $CM_BUILD_NUMBER - Signed IPA" \
+      #       --token "$FIREBASE_TOKEN"
 
     artifacts:
       - build/ios/ipa/*.ipa
@@ -40,7 +40,9 @@ workflows:
 
     publishing:
       firebase:
-        firebase_service_account: $FIREBASE_SERVICE_ACCOUNT
+        firebase_token: $FIREBASE_TOKEN
+        ios:
+          app_id: $FIREBASE_APP_ID
       email:
         recipients:
           - laleye.solomon@yahoo.com
