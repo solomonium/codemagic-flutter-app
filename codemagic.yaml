@@ -13,16 +13,19 @@ workflows:
       app_store_connect: solomonappstorekey
 
     scripts:
-      - name: Set up code signing settings on Xcode project
+      - name: Set up keychain
         script: keychain initialize
-    scripts:
+
       - name: Add Certificates
         script: add-certificates
-    scripts:
-      - name: Debug Provisioning Profiles
-        script: ls -al /Users/builder/Library/MobileDevice/Provisioning\ Profiles/
 
-      - name: Use profiles
+      - name: Fetch Provisioning Profile
+        script: |
+          echo "Fetching provisioning profile from Codemagic..."
+          app-store-connect fetch-signing-files "com.codemagicFlutterApp.test" --type IOS_ADHOC
+          ls -al /Users/builder/Library/MobileDevice/Provisioning\ Profiles/
+
+      - name: Use Profiles
         script: xcode-project use-profiles
 
       - name: Install Flutter dependencies
