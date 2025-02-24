@@ -14,7 +14,7 @@ workflows:
           - CodeMagicFlutterApp
         certificates:
           - CodemagicFlutterApp
-
+    scripts:
       - name: Use Profiles
         script: xcode-project use-profiles
 
