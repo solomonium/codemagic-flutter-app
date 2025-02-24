@@ -13,6 +13,12 @@ workflows:
       app_store_connect: solomonappstorekey
 
     scripts:
+      - name: Debug Certificates
+        script: |
+          echo "Checking certificate files..."
+          ls -al /Users/builder/Library/MobileDevice/Provisioning\ Profiles/
+          ls -al /Users/builder/
+
       - name: Set up keychain
         script: keychain initialize
 
