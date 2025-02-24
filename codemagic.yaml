@@ -16,26 +16,26 @@ workflows:
       bundle_identifier: com.codemagicFlutterApp.test
 
     scripts:
-        script: keychain initialize
-        script: add-certificates
+       - script: keychain initialize
+       - script: add-certificates
 
-        script: xcode-project use-profiles
+       - script: xcode-project use-profiles
 
-      - name: Install Flutter dependencies
-        script: flutter pub get
+      name: Install Flutter dependencies
+       - script: flutter pub get
 
-      - name: Authenticate with Firebase using Token
+      name: Authenticate with Firebase using Token
         script: |
           echo "🔄 Verifying Firebase authentication..."
           echo "FIREBASE_TOKEN: $FIREBASE_TOKEN"
           echo "GOOGLE_APPLICATION_CREDENTIALS_JSON: $GOOGLE_APPLICATION_CREDENTIALS_JSON"
           echo "✅ Firebase authentication successful"
 
-      - name: Build IPA with automatic versioning
+      name: Build IPA with automatic versioning
         script: |
           flutter build ipa --export-options-plist=/Users/builder/export_options.plist
 
-      - name: Distribute to Firebase
+      name: Distribute to Firebase
         script: |
           firebase appdistribution:distribute build/ios/ipa/Runner.ipa \
             --app "$FIREBASE_APP_ID" \
