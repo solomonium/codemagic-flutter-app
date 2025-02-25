@@ -36,11 +36,8 @@ workflows:
         firebase_token: $FIREBASE_TOKEN
         ios:
           app_id: $FIREBASE_APP_ID
-      email:
-        recipients:
-          - laleye.solomon@yahoo.com
-          - laleyesolomon2@gmail.com
-          - nihal@nevercode.io
+        groups:
+          - iosCodemagicTesters
         notify:
           success: true
           failure: false
