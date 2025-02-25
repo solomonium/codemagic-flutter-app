@@ -26,14 +26,6 @@ workflows:
         script: |
           flutter build ipa --export-options-plist=/Users/builder/export_options.plist
 
-      # - name: Distribute to Firebase
-      #   script: |
-      #     firebase appdistribution:distribute build/ios/ipa/Runner.ipa \
-      #       --app "$FIREBASE_APP_ID" \
-      #       --groups "testers" \
-      #       --release-notes "Build $CM_BUILD_NUMBER - Signed IPA" \
-      #       --token "$FIREBASE_TOKEN"
-
     artifacts:
       - build/ios/ipa/*.ipa
       - build/ios/ipa/Runner.ipa
