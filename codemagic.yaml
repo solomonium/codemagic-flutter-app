@@ -29,7 +29,6 @@ workflows:
     artifacts:
       - build/ios/ipa/*.ipa
       - build/ios/ipa/Runner.ipa
-      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
 
     publishing:
       firebase:
