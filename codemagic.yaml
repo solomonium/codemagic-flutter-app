@@ -35,5 +35,5 @@ workflows:
         firebase_token: $FIREBASE_TOKEN
         ios:
           app_id: $FIREBASE_APP_ID
-        groups:
-          - iosCodemagicTesters
+          groups:
+            - iosCodemagicTesters
